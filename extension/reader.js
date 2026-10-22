@@ -229,7 +229,7 @@ async function loadPDF(source,name){
     loadingTask.onPassword=(update,reason)=>{const password=prompt(reason===2?'Incorrect password. Try again:':'This PDF is password protected. Enter its password:');if(password===null)loadingTask.destroy();else update(password);};
     doc=await loadingTask.promise;if(version!==epoch)return;
     $('#welcome').hidden=true;const metadata=await doc.getMetadata().catch(()=>null);
-    $('#title').textContent=metadata?.info?.Title||name||'Untitled paper';document.title=$('#title').textContent+' · ArxivPDFReader';
+    $('#title').textContent=metadata?.info?.Title||name||'Untitled paper';document.title=$('#title').textContent+' · safari_arxiv_reader';
     for(let n=1;n<=doc.numPages;n++){
       const page=await doc.getPage(n);if(version!==epoch)return;
       const viewport=page.getViewport({scale});const node=el('section',null,'pdf-page');node.dataset.page=n;node.setAttribute('aria-label',`Page ${n}`);node.style.width=viewport.width+'px';node.style.height=viewport.height+'px';$('#pages').append(node);records.push({number:n,node,page,viewport,rendered:false});
@@ -366,9 +366,9 @@ function utility(title){$('#utility-title').textContent=title;$('#utility-body')
 $('#utility-close').onclick=()=>$('#utility-dialog').close();
 async function copyText(text){try{await navigator.clipboard.writeText(text);status('Copied to clipboard');}catch{const body=utility('Copy text');const area=el('textarea');area.value=text;body.append(area);area.select();}}
 function saveFile(data,type,name){const url=URL.createObjectURL(new Blob([data],{type}));const a=el('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);}
-async function savePaper(paper){const list=await storage.get('papertrail-library',[]);const id=paper.url||paper.pdf||paper.title;const item={...paper,savedAt:Date.now()};await storage.set('papertrail-library',[item,...list.filter(x=>(x.url||x.pdf||x.title)!==id)].slice(0,500));status('Saved to this browser’s ArxivPDFReader library');}
+async function savePaper(paper){const list=await storage.get('papertrail-library',[]);const id=paper.url||paper.pdf||paper.title;const item={...paper,savedAt:Date.now()};await storage.set('papertrail-library',[item,...list.filter(x=>(x.url||x.pdf||x.title)!==id)].slice(0,500));status('Saved to this browser’s safari_arxiv_reader library');}
 $('#save-paper').onclick=()=>{if(documentInfo)savePaper(documentInfo).catch(report);};
-$('#library').onclick=async()=>{const body=utility('Saved papers');const list=await storage.get('papertrail-library',[]);if(!list.length)body.append(el('p','No saved papers yet.'));for(const p of list){const section=el('section');section.append(el('h3',p.title),el('p',[p.authors,p.year].filter(Boolean).join(' · '),'small'),paperActions(p));const remove=el('button','Remove from library');remove.onclick=async()=>{const current=await storage.get('papertrail-library',[]);await storage.set('papertrail-library',current.filter(x=>(x.url||x.pdf||x.title)!==(p.url||p.pdf||p.title)));section.remove();};section.append(remove);body.append(section);}const exp=el('button','Export library');exp.onclick=()=>saveFile(JSON.stringify(list,null,2),'application/json','arxivpdfreader-library.json');body.append(exp);};
+$('#library').onclick=async()=>{const body=utility('Saved papers');const list=await storage.get('papertrail-library',[]);if(!list.length)body.append(el('p','No saved papers yet.'));for(const p of list){const section=el('section');section.append(el('h3',p.title),el('p',[p.authors,p.year].filter(Boolean).join(' · '),'small'),paperActions(p));const remove=el('button','Remove from library');remove.onclick=async()=>{const current=await storage.get('papertrail-library',[]);await storage.set('papertrail-library',current.filter(x=>(x.url||x.pdf||x.title)!==(p.url||p.pdf||p.title)));section.remove();};section.append(remove);body.append(section);}const exp=el('button','Export library');exp.onclick=()=>saveFile(JSON.stringify(list,null,2),'application/json','safari_arxiv_reader-library.json');body.append(exp);};
 function showCite(paper){
   const body=utility('BibTeX'),text=citationFormats(paper).BibTeX;
   body.append(el('pre',text));const copy=el('button','Copy BibTeX');copy.onclick=()=>copyText(text);
@@ -391,7 +391,7 @@ async function loadNotes(){const key='papertrail-notes-'+doc.fingerprints[0];not
 async function persistNotes(){await storage.set(notesKey,notes);drawNotes();}
 function drawNotes(){const list=$('#notes-list');list.replaceChildren();if(!notes.length)list.append(el('p','No saved notes.','small'));for(const n of notes){const b=el('button',`Page ${n.page} · ${n.quote}\n${n.comment||''}`);b.onclick=()=>{jump(n.page);editNote(n);};list.append(b);}}
 function editNote(note){const body=utility('Saved note');body.append(el('blockquote',note.quote));const text=el('textarea');text.value=note.comment||'';text.placeholder='Add a comment…';body.append(text);const save=el('button','Save comment');save.onclick=async()=>{note.comment=text.value;await persistNotes();$('#utility-dialog').close();};const remove=el('button','Remove note');remove.onclick=async()=>{notes=notes.filter(n=>n.id!==note.id);await persistNotes();$('#utility-dialog').close();};body.append(save,remove);}
-$('#export-notes').onclick=()=>saveFile(JSON.stringify({paper:documentInfo,notes},null,2),'application/json','arxivpdfreader-notes.json');
+$('#export-notes').onclick=()=>saveFile(JSON.stringify({paper:documentInfo,notes},null,2),'application/json','safari_arxiv_reader-notes.json');
 function onDocumentReady(){
   $('#page-count').textContent='/ '+doc.numPages;$('#page-number').value=1;thumbnailDoc=null;notes=[];loadNotes().catch(report);
   const source=currentSource?.url||null;const id=source?identifiers(source):{};const target=doc;

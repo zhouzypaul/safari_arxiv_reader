@@ -1,4 +1,4 @@
-# ArxivPDFReader
+# safari_arxiv_reader
 
 A Safari extension for reading research PDFs with a clickable section outline, reference previews, and quick access to cited papers. It enhances the PDF in its existing tab and keeps the original URL.
 
@@ -18,14 +18,14 @@ Requires **macOS 13 or later** and Apple Command Line Tools. The reader has been
 2. Clone and build:
 
    ```sh
-   git clone https://github.com/zhouzypaul/arxiv_paper_reader.git
-   cd arxiv_paper_reader
+   git clone https://github.com/zhouzypaul/safari_arxiv_reader.git
+   cd safari_arxiv_reader
    bash scripts/build-local.sh
-   open ArxivPDFReader.app
+   open safari_arxiv_reader.app
    ```
 
 3. In **Safari → Settings → Advanced**, enable **Show features for web developers**. Under **Developer**, enable **Allow unsigned extensions**.
-4. In **Safari → Settings → Extensions**, enable **ArxivPDFReader**. Allow access to **arxiv.org**. To display citation counts, also allow **scholar.google.com** under the extension's **Edit Websites…** settings.
+4. In **Safari → Settings → Extensions**, enable **safari_arxiv_reader**. Allow access to **arxiv.org**. To display citation counts, also allow **scholar.google.com** under the extension's **Edit Websites…** settings.
 
 Safari resets **Allow unsigned extensions** when it quits; enable it again for each new Safari session. Keep the built app in place. A permanent installation requires a signed distribution build; see [development instructions](docs/DEVELOPMENT.md).
 
@@ -38,3 +38,7 @@ Safari resets **Allow unsigned extensions** when it quits; enable it again for e
 - **AI outline** and **AI check** are optional, off by default, and require your own service credentials. Ordinary headings work without AI.
 
 Saved papers stay in this browser. Reference previews and citation counts use online metadata services; AI features send text only when requested. See [privacy and limitations](docs/PRIVACY.md), [release notes](CHANGELOG.md), and [third-party notices](THIRD-PARTY-NOTICES.txt).
+
+## Acknowledgements
+
+This is a completely vibe-coded project built with GPT-6 Astra.

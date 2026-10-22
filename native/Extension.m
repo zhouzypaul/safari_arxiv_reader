@@ -3,9 +3,9 @@
 
 // Deliberately narrow native transport: Pangram only, no filesystem access,
 // arbitrary URLs, cookies, persistent keys, public reports, or redirects.
-@interface ArxivPDFReaderExtensionHandler : NSObject <NSExtensionRequestHandling, NSURLSessionTaskDelegate>
+@interface SafariArxivReaderExtensionHandler : NSObject <NSExtensionRequestHandling, NSURLSessionTaskDelegate>
 @end
-@implementation ArxivPDFReaderExtensionHandler
+@implementation SafariArxivReaderExtensionHandler
 - (void)reply:(NSDictionary *)message context:(NSExtensionContext *)context {
  NSExtensionItem *item=[NSExtensionItem new];item.userInfo=@{SFExtensionMessageKey:message};
  [context completeRequestReturningItems:@[item] completionHandler:nil];

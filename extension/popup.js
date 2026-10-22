@@ -12,7 +12,7 @@ api.tabs.query({active:true,currentWindow:true}).then(([tab]) => {
   pdfPermission(tab?.url);
   currentURL=tab.url;currentTabId=tab.id;
   current.disabled=false;
-  status.textContent='Enhance this PDF in place · v0.3.13';
+  status.textContent='Enhance this PDF in place · v0.3.14';
 }).catch(e => { status.textContent=e.message; });
 current.onclick = async () => {
   if (!currentURL || current.disabled) return;

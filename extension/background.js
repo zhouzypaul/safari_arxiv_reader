@@ -12,7 +12,7 @@ api.tabs.onUpdated.addListener(async (tabId, change, tab) => {
     if (!await api.permissions.contains({origins:[`${url.origin}/*`]})) return;
     await api.scripting.executeScript({target:{tabId},files:['content.js']});
   } catch (error) {
-    console.debug('ArxivPDFReader: automatic PDF enhancement unavailable', error.message);
+    console.debug('safari_arxiv_reader: automatic PDF enhancement unavailable', error.message);
   }
 });
 
@@ -100,7 +100,7 @@ api.runtime.onMessage.addListener((message,sender)=>{
   if(sender.id&&sender.id!==api.runtime.id)return;
   return (async()=>{
     if(typeof message.title!=='string'||message.title.trim().length<3||message.title.length>1000)return {error:'Paper title is unavailable.'};
-    if(!await api.permissions.contains({origins:['https://scholar.google.com/*']}))return {error:'Allow ArxivPDFReader access to scholar.google.com in Safari to retrieve citation counts.',permissionRequired:true};
+    if(!await api.permissions.contains({origins:['https://scholar.google.com/*']}))return {error:'Allow safari_arxiv_reader access to scholar.google.com in Safari to retrieve citation counts.',permissionRequired:true};
     const title=message.title.trim();
     if(scholarPending.has(title))return scholarPending.get(title);
     const work=scholarQueue.then(()=>lookupScholarTab(title)).catch(error=>({error:error.message}));

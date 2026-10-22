@@ -8,7 +8,7 @@
   const originalURL=location.href;
   const originalBody=document.body;const originalStyle=document.documentElement.style.cssText;
   const frame=document.createElement('iframe');
-  frame.id='papertrail-reader-frame';frame.title='ArxivPDFReader PDF reader';
+  frame.id='papertrail-reader-frame';frame.title='safari_arxiv_reader PDF reader';
   const reader=new URL(api.runtime.getURL('reader.html'));
   reader.searchParams.set('url',originalURL);reader.searchParams.set('embedded','1');
   frame.src=reader.href;

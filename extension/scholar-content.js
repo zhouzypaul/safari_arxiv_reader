@@ -1,4 +1,4 @@
-// Read only the result page the user explicitly opened from ArxivPDFReader.
+// Read only the result page the user explicitly opened from safari_arxiv_reader.
 // No background requests, pagination, automatic selection, or CAPTCHA handling.
 (async()=>{
   if(globalThis.__papertrailScholar)return;
@@ -11,7 +11,7 @@
   globalThis.__papertrailScholar=true;
   const panel=document.createElement('section');panel.id='papertrail-scholar-panel';
   Object.assign(panel.style,{background:'#eaf2f8',color:'#243b4d',padding:'14px 24px',borderBottom:'1px solid #cbd9e4',font:'14px/1.5 system-ui'});
-  const heading=document.createElement('strong');heading.textContent='ArxivPDFReader · '+pending.title;
+  const heading=document.createElement('strong');heading.textContent='safari_arxiv_reader · '+pending.title;
   const note=document.createElement('div');note.textContent='Choose “Use citation count” under the correct result. The count will appear in your PDF reader; return to that tab when finished.';
   panel.append(heading,note);document.body.prepend(panel);
   let added=0;

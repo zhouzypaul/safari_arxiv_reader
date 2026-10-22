@@ -14,10 +14,10 @@ From the repository root:
 
 ```sh
 bash scripts/build-local.sh
-open ArxivPDFReader.app
+open safari_arxiv_reader.app
 ```
 
-Apple Command Line Tools are sufficient for this ad-hoc-signed build. The script verifies the resulting signatures. `ARXIVPDFREADER_BUILD_APP` can override the output path. The app must remain on disk for Safari to load its extension.
+Apple Command Line Tools are sufficient for this ad-hoc-signed build. The script verifies the resulting signatures. `SAFARI_ARXIV_READER_BUILD_APP` can override the output path. The app must remain on disk for Safari to load its extension.
 
 The `dev.papertrail.reader` identifiers, `papertrail-*` storage keys, and `PAPERTRAIL_*` test variables are retained for compatibility with existing installations.
 
@@ -51,10 +51,10 @@ Extended suites are `test:parity`, `test:interactions`, `test:insights`, `test:s
 
 The default fixture directory is `.test-fixtures/`, which is ignored by Git. `PAPERTRAIL_RUNTIME` optionally points to a Node module-resolution entry point when dependencies live outside this repository. Browser suites use recorded metadata and simulated extension APIs; they do not prove live service availability or physical trackpad latency. AI checks use simulated responses and do not consume paid API credits.
 
-The v0.3.13 unit suite has 51 passing tests. Previous WebKit checks cover rendering, outlines, reference previews, zoom, search, saved papers, and optional-service flows. Generated screenshots and performance reports are ignored; selected documentation screenshots live in `docs/images/`.
+The v0.3.14 unit suite has 51 passing tests. Previous WebKit checks cover rendering, outlines, reference previews, zoom, search, saved papers, and optional-service flows. Generated screenshots and performance reports are ignored; selected documentation screenshots live in `docs/images/`.
 
 ## Signed distribution
 
 A permanent distribution requires your own Apple developer signing configuration and a suitable distribution route. This repository does not include signing credentials or a notarized release.
 
-With full Xcode installed, `bash scripts/build-safari.sh` creates an Xcode scaffold. Add `native/Extension.m` to the extension target, set its principal class to `ArxivPDFReaderExtensionHandler`, link SafariServices, and retain the network-client entitlement and `nativeMessaging` permission to support Pangram. The local build script already includes this bridge.
+With full Xcode installed, `bash scripts/build-safari.sh` creates an Xcode scaffold. Add `native/Extension.m` to the extension target, set its principal class to `SafariArxivReaderExtensionHandler`, link SafariServices, and retain the network-client entitlement and `nativeMessaging` permission to support Pangram. The local build script already includes this bridge.

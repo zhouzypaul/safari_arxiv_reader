@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 0.3.14
+
+- Renamed the app, extension, and repository to `safari_arxiv_reader`.
+- Added the GPT-6 Astra acknowledgement to the README.
 
 - Simplified the README with screenshots and Safari installation instructions.
 - Separated release notes, development guidance, and privacy information.

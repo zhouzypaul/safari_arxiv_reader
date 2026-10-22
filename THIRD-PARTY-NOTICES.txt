@@ -2,5 +2,5 @@ PDF.js 5.6.205 — Mozilla Foundation and contributors.
 Distributed under Apache License 2.0; see extension/vendor/PDFJS-LICENSE.
 Auxiliary CMaps, fonts and WASM dependencies retain their bundled license files.
 
-ArxivPDFReader is an independent prototype, not affiliated with or endorsed by Google,
+safari_arxiv_reader is an independent prototype, not affiliated with or endorsed by Google,
 Google Scholar, Apple, OpenAlex, Mozilla, or OpenAI.
