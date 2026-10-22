@@ -1,0 +1,20 @@
+import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFile} from 'node:fs/promises';
+import {pdfAccess,pdfPermission} from '../extension/permissions.js';
+const popup=await readFile(new URL('../extension/popup.js',import.meta.url),'utf8');
+async function runPopup(source,{granted=true,url='https://arxiv.org/pdf/2606.11087',queryError=false}={}) {
+ const elements=Object.fromEntries(['#current','#empty','#status'].map(x=>[x,{disabled:false,textContent:''}]));
+ const calls=[];let gesture=false,closed=false;
+ const api={scripting:{executeScript:async spec=>{calls.push(['inject',spec.target.tabId,spec.files[0]]);return[{result:{mounted:true}}];}},runtime:{getURL:p=>'safari-web-extension://test/'+p},tabs:{query:async()=>{calls.push('query');if(queryError)throw Error('Tab lookup failed');return[{url,id:7}];},create:async tab=>calls.push(['create',tab.url])},permissions:{request:p=>{calls.push(['request',gesture,p.origins[0]]);if(!gesture)throw Error('Invalid call to permissions.request(). Must be called during a user gesture.');return Promise.resolve(granted);}}};
+ vm.runInNewContext(source.replace(/^import .*;\n/,''),{browser:api,document:{querySelector:s=>elements[s]},window:{close:()=>{closed=true;}},URL,pdfAccess,pdfPermission});
+ await new Promise(resolve=>setImmediate(resolve));
+ const disabled=elements['#current'].disabled;gesture=true;const pending=elements['#current'].onclick();gesture=false;await pending;
+ return {calls,elements,closed,disabled};
+}
+test('popup requests permission within the synchronous click gesture',async()=>{const r=await runPopup(popup);assert.equal(r.disabled,false);assert.deepEqual(r.calls.slice(0,2),['query',['request',true,'https://arxiv.org/*']]);assert.equal(r.calls.filter(x=>x==='query').length,1);assert.equal(r.closed,true);assert.deepEqual(r.calls[2],['inject',7,'content.js']);assert.equal(r.calls.some(x=>x[0]==='create'),false);});
+test('denial keeps popup open and permits retry',async()=>{const r=await runPopup(popup,{granted:false});assert.equal(r.closed,false);assert.equal(r.elements['#current'].disabled,false);assert.match(r.elements['#status'].textContent,/Website access/);assert.equal(r.calls.length,2);});
+test('local files cannot request web permissions',async()=>{const r=await runPopup(popup,{url:'file:///paper.pdf'});assert.equal(r.disabled,true);assert.equal(r.calls.length,1);assert.match(r.elements['#status'].textContent,/local PDF/);});
+test('tab lookup failure leaves Read disabled',async()=>{const r=await runPopup(popup,{queryError:true});assert.equal(r.disabled,true);assert.equal(r.calls.length,1);});
+test('reader startup checks existing access without prompting',async()=>{let checks=0,requests=0;const api={permissions:{contains:async()=>{checks++;return true;},request:()=>{requests++;throw Error('No gesture');}}};assert.equal(await pdfAccess(api,'https://arxiv.org/pdf/123',false),true);assert.equal(checks,1);assert.equal(requests,0);});
+test('missing startup permission returns false without prompting',async()=>{const api={permissions:{contains:async()=>false,request:()=>{throw Error('Must not prompt');}}};assert.equal(await pdfAccess(api,'https://arxiv.org/pdf/123',false),false);});
+test('explicit Read requests before returning a promise',async()=>{let called=false;const api={permissions:{request:()=>{called=true;return Promise.resolve(true);}}};const pending=pdfAccess(api,'https://arxiv.org/pdf/123',true);assert.equal(called,true);assert.equal(await pending,true);});
+test('regression harness detects the original lost-gesture bug',async()=>{const source=`const api=browser;document.querySelector('#current').onclick=async()=>{try{const [tab]=await api.tabs.query({active:true,currentWindow:true});await api.permissions.request({origins:[new URL(tab.url).origin+'/*']});}catch(e){document.querySelector('#status').textContent=e.message;}};`;const r=await runPopup(source);assert.match(r.elements['#status'].textContent,/Must be called during a user gesture/);});

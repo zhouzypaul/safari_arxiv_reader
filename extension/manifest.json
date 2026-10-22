@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+  "name": "ArxivPDFReader",
+  "version": "0.3.13",
+  "description": "Read papers with section outlines, optional AI summaries, and citation previews.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "https://api.openalex.org/*",
+    "https://api.openai.com/*",
+    "https://scholar.google.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Read in ArxivPDFReader"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; connect-src https: http: blob:; worker-src 'self' blob:"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://arxiv.org/pdf/*",
+        "https://*.arxiv.org/pdf/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://scholar.google.com/scholar*"
+      ],
+      "js": [
+        "scholar-content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "reader.html"
+      ],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  }
+}

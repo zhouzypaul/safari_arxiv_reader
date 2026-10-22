@@ -1,0 +1,25 @@
+# Generated apps, archives, and build output
+*.app/
+*.appex/
+*.zip
+Safari/
+build/
+DerivedData/
+
+# Local dependencies, fixtures, and browser test output
+node_modules/
+.test-fixtures/
+playwright-report/
+test-results/
+/*.png
+/performance-results.json
+
+# Local settings and credentials
+.DS_Store
+.env
+.env.*
+!.env.example
+*.p12
+*.mobileprovision
+*.xcuserstate
+xcuserdata/

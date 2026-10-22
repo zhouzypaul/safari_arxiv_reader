@@ -1,0 +1,20 @@
+{
+  "name": "arxivpdfreader-safari",
+  "version": "0.3.13",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test:browser": "node tests/browser-smoke.mjs",
+    "test:parity": "node tests/parity-browser.mjs",
+    "test:interactions": "node tests/interaction-regressions.mjs",
+    "test:resources": "node tests/resource-profile.mjs",
+    "test:insights": "node tests/insights-browser.mjs",
+    "test:scholar": "node tests/scholar-browser.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "pdf-lib": "1.17.1"
+  }
+}
