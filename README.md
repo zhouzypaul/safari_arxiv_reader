@@ -39,6 +39,10 @@ Safari resets **Allow unsigned extensions** when it quits; enable it again for e
 
 Saved papers stay in this browser. Reference previews and citation counts use online metadata services; AI features send text only when requested. See [privacy and limitations](docs/PRIVACY.md), [release notes](CHANGELOG.md), and [third-party notices](THIRD-PARTY-NOTICES.txt).
 
+## License
+
+[MIT](LICENSE). Provided as is, without warranty. Bundled dependencies retain their own [licenses and notices](THIRD-PARTY-NOTICES.txt).
+
 ## Acknowledgements
 
 This is a completely vibe-coded project built with GPT-6 Astra.

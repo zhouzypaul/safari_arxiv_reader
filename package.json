@@ -1,6 +1,7 @@
 {
   "name": "safari_arxiv_reader",
   "version": "0.3.14",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
